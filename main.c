@@ -1,21 +1,21 @@
+#include "rcc_hal.h"
+#include "gpio_hal.h"
+#include "stm32_def.h"
+
 #include <stdint.h>
 
-#define RCC_BASE 0x40023800
-#define GPIOA_BASE 0x40020000
 
-#define RCC_AHB1ENR *(volatile uint32_t*)(RCC_BASE + 0x30)
-#define GPIOA_MODER *(volatile uint32_t*)(GPIOA_BASE + 0x00)
-#define GPIOA_ODR *(volatile uint32_t*)(GPIOA_BASE + 0x14)
 
-int main(void)
-{
-    RCC_AHB1ENR |= (1 << 0);
-    GPIOA_MODER |= (1 << 10);
+int main(void) {
 
-    while(1) {
-        GPIOA_ODR |= (1 << 5);
-        for (int i = 0; i < 1000000; i++);
-        GPIOA_ODR &= ~(1 << 5);
-        for (int i = 0; i < 1000000; i++);
-    }
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = 0; // PA0
+    GPIO_InitStruct.Mode = 1; // Output
+    GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    while (1) {
+        GPIO_TogglePin(GPIOA, 0);
+        for (volatile uint32_t i = 0; i < 100000; i++); // Simple delay
+        }
 }

@@ -15,6 +15,6 @@ int main(void)
 
     while(1) {
         GPIO_TogglePin(GPIOA, 5); // Toggle PA5
-        for (volatile uint32_t i = 0; i < 100000; i++); // Simple delay
+        for (volatile uint32_t i = 0; i < 10000; i++); // Simple delay
     }
 }
